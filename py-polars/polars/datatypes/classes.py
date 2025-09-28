@@ -840,13 +840,13 @@ class Categorical(DataType):
 
 class Enum(DataType):
     """
-    A fixed categorical encoding of a unique set of strings.
+    A fixed categorical encoding of an ordered collection of unique strings.
 
     Parameters
     ----------
     categories
-        The categories in the dataset; must be a unique set of strings, or an
-        existing Python string-valued enum.
+        The categories in the dataset; must be an ordered collection of unique
+        strings, or an existing Python string-valued enum.
 
     Examples
     --------
@@ -876,6 +876,9 @@ class Enum(DataType):
                 getattr(v, "value", v) for v in categories.__members__.values()
             ]
             categories = pl.Series(values=enum_values)
+        elif type(categories) is set:
+            msg = "Enum categories must be an ordered collection; sets are unordered"
+            raise TypeError(msg)
         elif not isinstance(categories, pl.Series):
             categories = pl.Series(values=categories)
 

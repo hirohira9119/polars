@@ -108,6 +108,14 @@ def test_enum_init_from_python_invalid() -> None:
             pl.Enum(Color)
 
 
+def test_enum_init_from_python_set() -> None:
+    with pytest.raises(
+        TypeError,
+        match="Enum categories must be an ordered collection; sets are unordered",
+    ):
+        pl.Enum({"red", "green", "blue"})
+
+
 def test_enum_non_existent() -> None:
     with pytest.raises(
         InvalidOperationError,
